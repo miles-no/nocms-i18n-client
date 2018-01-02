@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ava -s",
     "watch": "ava -s -w",
-    "semantic-release": "semantic-release",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "eslint": "eslint ."
   },
   "repository": {
