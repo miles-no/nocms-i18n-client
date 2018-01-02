@@ -1,37 +1,46 @@
-const test = require('tape');
+import test from 'ava';
 const sut = require('../');
 
 const apiHost = 'http://localhost:4103/applications/i18n/phrases';
 
-const tearDown = () => {
-  sut.stopRefresh();
-};
-
-test('Should get phrases from i18n api', (t) => {
-  t.plan(1);
-  sut.init(apiHost).then((dictionary) => {
-    console.log('param', dictionary);
-    console.log('get', sut.get());
+test('Init should load from api', async (t) => {
+  await sut.init(apiHost).then((dictionary) => {
     t.pass('i18n loaded');
   }, (err) => {
-    console.log('err', err);
-    t.fail('Couldn\'t get i18n  ');
+    t.fail(err);
   });
 });
 
-test('Should get multiple times', (t) => {
-  t.plan(1);
-  sut.init(apiHost).then((dictionary) => {
-    console.log('get test', sut.get('test'));
-    console.log('get aaa', sut.get('aaa'));
-    t.pass('i18n loaded');
+test('Should get multiple times', async (t) => {
+  await sut.init(apiHost, 'no').then((dictionary) => {
+    t.is(sut.get('test'), 'testttt');
+    t.is(sut.get('aaa'), 'bb');
   }, (err) => {
-    console.log('err', err);
-    t.fail('Couldn\'t get i18n  ');
+    t.fail(err);
   });
 });
 
-test('teardown', (t) => {
-  tearDown();
-  t.end();
+test('Unknown should be undefined', async (t) => {
+  await sut.init(apiHost, 'no').then((dictionary) => {
+    t.is(sut.get('i dont exist'), undefined);
+  }, (err) => {
+    t.fail(err);
+  });
+});
+
+test('Should get undefined if key misses for language', async (t) => {
+  await sut.init(apiHost, 'bamse').then((dictionary) => {
+    t.is(sut.get('test'), undefined);
+  }, (err) => {
+    t.fail(err);
+  });
+});
+
+test('Should return all when no default language set', async (t) => {
+  await sut.init(apiHost).then((dictionary) => {
+    t.is(sut.get('test').no,  'testttt');
+    t.is(sut.get('test').en,  'tttt');
+  }, (err) => {
+    t.fail(err);
+  });
 });

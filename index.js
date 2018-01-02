@@ -8,6 +8,7 @@ const defaultHost = process.env.I18N_API_HOST || 'http://i18n_api:3000/applicati
 
 let intervalHandle;
 let dictionaryCache = null;
+let language;
 
 const loadDictionary = function loadDictionary(i18nApi) {
   return new Promise((resolve, reject) => {
@@ -56,7 +57,8 @@ const updateDictionaryCache = function updateDictionaryCache(apiHost) {
 };
 /* eslint arrow-body-style: off */
 module.exports = {
-  init: function init(apiHost = defaultHost, refreshInterval = defaultRefreshInterval) {
+  init: function init(apiHost = defaultHost, lang = undefined, refreshInterval = defaultRefreshInterval) {
+    language = lang;
     return updateDictionaryCache(apiHost).then((dictionary) => {
       intervalHandle = setInterval(() => updateDictionaryCache, refreshInterval);
       console.info(`Phrases loaded from ${apiHost})`);
@@ -74,8 +76,15 @@ module.exports = {
     if (!key) {
       return dictionaryCache;
     }
+    const matches = dictionaryCache.filter(f => {
+      return f.key == key;
+    });
+    
 
-    return dictionaryCache[key];
+    if (matches.length) {
+      return language ? matches[0][language] : matches[0];
+    }
+    return undefined;
   },
 
   stopRefresh: () => {

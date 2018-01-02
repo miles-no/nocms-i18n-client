@@ -4,7 +4,8 @@
   "description": "I18n package for NoCMS",
   "main": "index.js",
   "scripts": {
-    "test": "node test/",
+    "test": "ava -s",
+    "watch": "ava -s -w",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "eslint": "eslint ."
   },
@@ -19,13 +20,13 @@
     "superagent": "^3.6.3"
   },
   "devDependencies": {
+    "ava": "^0.24.0",
     "condition-circle": "1.5.0",
     "eslint": "^4.9.0",
     "eslint-config-webteam": "^2.0.0",
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.2.0",
-    "semantic-release": "^8.2.0",
-    "tape": "^4.8.0"
+    "semantic-release": "^8.2.0"
   },
   "release": {
     "verifyConditions": "condition-circle",
