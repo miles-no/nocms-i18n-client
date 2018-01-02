@@ -20,9 +20,9 @@ test('Should get multiple times', async (t) => {
   });
 });
 
-test('Unknown should be undefined', async (t) => {
+test('Should return key when no match', async (t) => {
   await sut.init(apiHost, 'no').then((dictionary) => {
-    t.is(sut.get('i dont exist'), undefined);
+    t.is(sut.get('i dont exist'), 'i dont exist');
   }, (err) => {
     t.fail(err);
   });
@@ -30,7 +30,7 @@ test('Unknown should be undefined', async (t) => {
 
 test('Should get undefined if key misses for language', async (t) => {
   await sut.init(apiHost, 'bamse').then((dictionary) => {
-    t.is(sut.get('test'), undefined);
+    t.is(sut.get('test'), 'test');
   }, (err) => {
     t.fail(err);
   });

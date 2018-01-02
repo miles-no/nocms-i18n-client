@@ -82,9 +82,9 @@ module.exports = {
     
 
     if (matches.length) {
-      return language ? matches[0][language] : matches[0];
+      return language ? matches[0][language] || key : matches[0];
     }
-    return undefined;
+    return key;
   },
 
   stopRefresh: () => {
