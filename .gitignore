@@ -48,5 +48,3 @@ node_modules
 app/assets/javascript/nocms.js
 app/assets/javascript/scripts.js
 app/bin/index.js
-
-package-lock.json
